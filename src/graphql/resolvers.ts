@@ -1,13 +1,10 @@
-import {PlayerType, RoomType} from "./types";
-import {PubSub, withFilter} from "apollo-server";
-import {RoomList} from "./roomList";
+import {PlayerType, RoomType} from "../features/room/types";
+import {IResolvers, withFilter} from "apollo-server";
+import {RoomList} from "../features/room/roomList";
+import {pubsub, pubsubEvents} from "./pubsub";
 
 
-const pubsub = new PubSub();
-
-const ON_ROOM_UPDATE = 'ON_ROOM_UPDATE'
-
-export const resolvers = {
+export const resolvers: IResolvers = {
     Query: {
         rooms: (parent, args, context, info): Array<RoomType> => {
             return RoomList.getRooms()
@@ -17,13 +14,19 @@ export const resolvers = {
         addPlayer: (parent, {player, roomId}: { player: PlayerType, roomId: number }, context, info): RoomType => {
             const Room = RoomList.getRoom(roomId)
             Room.addPlayer(player)
-            pubsub.publish(ON_ROOM_UPDATE, {onRoomUpdate: Room.room});
+            pubsub.publish(pubsubEvents.ON_ROOM_UPDATE, {onRoomUpdate: Room.room})
             return Room.room
         },
         updatePlayer: (parent, {player, roomId}: { player: PlayerType, roomId: number }, context, info): RoomType => {
             const Room = RoomList.getRoom(roomId)
             Room.updatePlayer(player)
-            pubsub.publish(ON_ROOM_UPDATE, {onRoomUpdate: Room.room});
+            pubsub.publish(pubsubEvents.ON_ROOM_UPDATE, {onRoomUpdate: Room.room})
+            return Room.room
+        },
+        deletePlayer: (parent, {player, roomId}: { player: PlayerType, roomId: number }, context, info): RoomType => {
+            const Room = RoomList.getRoom(roomId)
+            Room.deletePlayer(player)
+            pubsub.publish(pubsubEvents.ON_ROOM_UPDATE, {onRoomUpdate: Room.room})
             return Room.room
         },
         createRoom: (parent, {room}: { room: RoomType }, context, info): RoomType => {
@@ -35,9 +38,9 @@ export const resolvers = {
     },
     Subscription: {
         onRoomUpdate: {
-            subscribe: withFilter(() => pubsub.asyncIterator([ON_ROOM_UPDATE]),
+            subscribe: withFilter(() => pubsub.asyncIterator([pubsubEvents.ON_ROOM_UPDATE]),
                 (payload, variables: { id: number }) => {
-                    return (payload.onRoomUpdate.repository_name === variables.id);
+                    return (payload.onRoomUpdate.id === variables.id);
                 }),
         }
     }

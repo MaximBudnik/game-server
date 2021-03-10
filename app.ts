@@ -1,10 +1,11 @@
 import {ApolloServer} from "apollo-server";
-import {typeDefs} from "./src/typeDefs";
-import {resolvers} from "./src/resolvers";
-
+import './src/features/Registry/registries'
+import * as Registry from "./src/features/Registry";
 
 const server = new ApolloServer({
-    typeDefs, resolvers, subscriptions: {
+    typeDefs: Registry.TypeDefRegistry.combine(),
+    resolvers: Registry.ResolverRegistry.combine(),
+    subscriptions: {
         path: '/subscriptions'
     }
 });
@@ -14,12 +15,21 @@ server.listen().then(({url}) => {
 });
 
 /*
-
+*
 * TODO
 *
-* Add TypeDefsRegistry
+* Add TypeDefsRegistry ✅
 * Make better types or add some instrument for its generation https://graphql-code-generator.com/docs/getting-started/index
 * PubSub and Logger decorators
 * Testing framework
+*
+* */
 
+/*
+*
+* TODO
+*
+* Next Scope
+* Create cli for further feature-driven development
+*
 * */

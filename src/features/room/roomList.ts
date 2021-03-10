@@ -1,6 +1,6 @@
-import {Room} from "./game/room";
+import {Room} from "./room";
 import {RoomType} from "./types";
-import {memo} from "./common/memo";
+import {memo} from "../../common/memo";
 
 class _RoomList {
     private rooms: Array<Room> = []

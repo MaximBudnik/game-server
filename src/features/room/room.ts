@@ -1,4 +1,4 @@
-import {PlayerType, RoomType} from "../types";
+import {PlayerType, RoomType} from "./types";
 
 export class Room {
     room: RoomType = {
