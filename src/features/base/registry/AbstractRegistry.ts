@@ -1,6 +1,6 @@
 type T<T> = Array<T> | T;
 
-export class AbstractRegistry<RegisterType, CombineType extends T<RegisterType> = Array<RegisterType>> {
+export abstract class AbstractRegistry<RegisterType, CombineType extends T<RegisterType> = Array<RegisterType>> {
     protected elements: Array<RegisterType> = []
 
     constructor(root: RegisterType = null) {

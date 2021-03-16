@@ -1,10 +1,11 @@
-import {PlayerType, RoomType} from "../features/room/types";
 import {IResolvers, withFilter} from "apollo-server";
-import {RoomList} from "../features/room/roomList";
-import {pubsub, pubsubEvents} from "./pubsub";
+import {PlayerType, RoomInput, RoomType} from "../../../types";
+import {RoomList} from "./_/RoomList";
+import {pubsub, pubsubEvents} from "../../graphql/pubsub";
+import {ResolverRegistry} from "../base/registry";
+import {Room} from "./_/Room";
 
-
-export const resolvers: IResolvers = {
+const resolvers: IResolvers = {
     Query: {
         rooms: (parent, args, context, info): Array<RoomType> => {
             return RoomList.getRooms()
@@ -12,25 +13,25 @@ export const resolvers: IResolvers = {
     },
     Mutation: {
         addPlayer: (parent, {player, roomId}: { player: PlayerType, roomId: number }, context, info): RoomType => {
-            const Room = RoomList.getRoom(roomId)
+            const Room: Room = RoomList.getRoom(roomId)
             Room.addPlayer(player)
             pubsub.publish(pubsubEvents.ON_ROOM_UPDATE, {onRoomUpdate: Room.room})
             return Room.room
         },
         updatePlayer: (parent, {player, roomId}: { player: PlayerType, roomId: number }, context, info): RoomType => {
-            const Room = RoomList.getRoom(roomId)
+            const Room: Room = RoomList.getRoom(roomId)
             Room.updatePlayer(player)
             pubsub.publish(pubsubEvents.ON_ROOM_UPDATE, {onRoomUpdate: Room.room})
             return Room.room
         },
-        deletePlayer: (parent, {player, roomId}: { player: PlayerType, roomId: number }, context, info): RoomType => {
-            const Room = RoomList.getRoom(roomId)
-            Room.deletePlayer(player)
+        deletePlayer: (parent, {playerId, roomId}: { playerId: number, roomId: number }, context, info): RoomType => {
+            const Room: Room = RoomList.getRoom(roomId)
+            Room.deletePlayer(playerId)
             pubsub.publish(pubsubEvents.ON_ROOM_UPDATE, {onRoomUpdate: Room.room})
             return Room.room
         },
-        createRoom: (parent, {room}: { room: RoomType }, context, info): RoomType => {
-            return RoomList.addRoom(room)
+        createRoom: (parent, {room}: { room: RoomInput }, context, info): RoomType => {
+            return RoomList.addRoom({...room, id: RoomList.generateValidRoomId(), players: []})
         },
         deleteRoom: (parent, {room}: { room: RoomType }, context, info): RoomType => {
             return RoomList.deleteRoom(room)
@@ -38,7 +39,7 @@ export const resolvers: IResolvers = {
     },
     Subscription: {
         onRoomUpdate: {
-            subscribe: withFilter(() => pubsub.asyncIterator([pubsubEvents.ON_ROOM_UPDATE]),
+            subscribe: withFilter((() => pubsub.asyncIterator([pubsubEvents.ON_ROOM_UPDATE])),
                 (payload, variables: { id: number }) => {
                     return (payload.onRoomUpdate.id === variables.id);
                 }),
@@ -46,3 +47,4 @@ export const resolvers: IResolvers = {
     }
 };
 
+ResolverRegistry.register(resolvers)

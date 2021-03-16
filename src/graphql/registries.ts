@@ -1,4 +1,4 @@
 /*
     Import all registries here
  */
-import '../room/graphql'
+import '../features/room'

@@ -1,4 +1,4 @@
-import {PlayerType, RoomType} from "./types";
+import {PlayerType, RoomType} from "../../../../types";
 
 export class Room {
     room: RoomType = {
@@ -18,8 +18,8 @@ export class Room {
         const playerIndex = this.room.players.findIndex((e => e.id == player.id));
         this.room.players[playerIndex] = player
     }
-    deletePlayer = (player: PlayerType): void => {
-        const playerIndex = this.room.players.map(e => e.id).indexOf(player.id);
+    deletePlayer = (id: number): void => {
+        const playerIndex = this.room.players.map(e => e.id).indexOf(id);
         this.room.players.splice(playerIndex, 1)
     }
 }

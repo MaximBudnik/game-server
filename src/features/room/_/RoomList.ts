@@ -1,12 +1,14 @@
-import {Room} from "./room";
-import {RoomType} from "./types";
-import {memo} from "../../common/memo";
+import {Room} from "./Room";
+import {RoomType} from "../../../../types";
+import {memo} from "../../../common/memo";
 
 class _RoomList {
     private rooms: Array<Room> = []
     getRoom = memo((id: number) => {
         return this.rooms.find(e => e.room.id === id)
     })
+
+    generateValidRoomId = (): number => this.rooms.length
 
     getRooms = (): Array<RoomType> => {
         return this.rooms.map(e => e.room)
