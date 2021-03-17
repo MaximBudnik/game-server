@@ -1,12 +1,11 @@
-import {Room} from "./Room";
 import {RoomType} from "../../../../types";
-import {memo} from "../../../common/memo";
+import {IRoom, newRoom} from "./Room";
 
 class _RoomList {
-    private rooms: Array<Room> = []
-    getRoom = memo((id: number) => {
+    private rooms: Array<IRoom> = []
+    getRoom = (id: number) => {
         return this.rooms.find(e => e.room.id === id)
-    })
+    }
 
     generateValidRoomId = (): number => this.rooms.length
 
@@ -15,7 +14,7 @@ class _RoomList {
     }
 
     addRoom = (room: RoomType): RoomType => {
-        const newLength = this.rooms.push(new Room(room))
+        const newLength = this.rooms.push(newRoom(room))
         return this.rooms[newLength - 1].room
     }
     deleteRoom = (room: RoomType): RoomType => {

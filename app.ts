@@ -10,32 +10,10 @@ try {
             path: '/subscriptions',
         }
     });
-
-    server.listen().then(({url}) => {
+    server.listen(4000, process.env.IP).then(({url}) => {
         console.log(`Server ready at ${url}`);
     });
 
 } catch (e) {
     console.error(e);
 }
-
-
-/*
-*
-* TODO
-*
-* Add TypeDefsRegistry ✅
-* Make better types or add some instrument for its generation https://graphql-code-generator.com/docs/getting-started/index
-* PubSub and Logger decorators
-* Testing framework
-*
-* */
-
-/*
-*
-* TODO
-*
-* Next Scope
-* Create cli for further feature-driven development
-*
-* */
