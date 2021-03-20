@@ -1,6 +1,10 @@
+export type CharacterType = 'redKnight'
+
+
 export type PlayerType = {
     id: number
     name: string
+    character: CharacterType
 }
 
 export type RoomType = {
@@ -20,7 +24,10 @@ export type RoomInput = {
     name: string
 }
 
-export type PlayerInput = PlayerType
+export type PlayerInput = {
+    id: number
+    name: string
+}
 
 export type RoomSubscriptionInput = {
     id: number

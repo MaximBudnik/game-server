@@ -1,10 +1,9 @@
 import {IResolvers, withFilter} from "apollo-server";
 import {ResolverRegistry} from "../base/registry";
 import {pubsub, pubsubEvents} from "../../graphql/pubsub";
-import {ChatMessage} from "../../../types";
+import {Chat, ChatMessage} from "../../../types";
 import {RoomList} from "../room/_/RoomList";
 import {IRoom} from "../room/_/Room";
-import {Chat} from "../../../types/src/ChatTypes";
 
 const resolvers: IResolvers = {
     Query: {},
@@ -15,7 +14,7 @@ const resolvers: IResolvers = {
         }: { chatMessage: ChatMessage, roomId: number }, context, info): Chat => {
             const Room: IRoom = RoomList.getRoom(roomId)
             Room.chat.addMessage(chatMessage)
-            pubsub.publish(pubsubEvents.ON_LOBBY_CHAT_UPDATE, {onLobbyChatUpdate: Room.chat})
+
             return {messages: Room.chat.messages}
         }
     },

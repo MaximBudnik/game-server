@@ -18,19 +18,16 @@ const resolvers: IResolvers = {
                 Room.deletePlayer(player.id)
             }
             Room.addPlayer(player)
-            pubsub.publish(pubsubEvents.ON_ROOM_UPDATE, {onRoomUpdate: Room.room})
             return Room.room
         },
         updatePlayer: (parent, {player, roomId}: { player: PlayerType, roomId: number }, context, info): RoomType => {
             const Room: IRoom = RoomList.getRoom(roomId)
             Room.updatePlayer(player)
-            pubsub.publish(pubsubEvents.ON_ROOM_UPDATE, {onRoomUpdate: Room.room})
             return Room.room
         },
         deletePlayer: (parent, {playerId, roomId}: { playerId: number, roomId: number }, context, info): RoomType => {
             const Room: IRoom = RoomList.getRoom(roomId)
             Room.deletePlayer(playerId)
-            pubsub.publish(pubsubEvents.ON_ROOM_UPDATE, {onRoomUpdate: Room.room})
             if (Room.room.players.length === 0) {
                 RoomList.deleteRoom(Room.room)
             }
