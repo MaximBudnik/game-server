@@ -19,7 +19,10 @@ class _RoomList {
     }
     deleteRoom = (room: RoomType): RoomType => {
         const roomIndex = this.rooms.map(e => e.room.id).indexOf(room.id);
-        const returnData = this.rooms[roomIndex].room
+        const Room = this.rooms[roomIndex]
+        const returnData = Room.room
+        Room.game.pause()
+        this.rooms[roomIndex] = null
         this.rooms.splice(roomIndex, 1)
         return returnData
     }

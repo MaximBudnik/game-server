@@ -40,5 +40,5 @@ class Chat implements IChat {
     }
 }
 
-export const newChat = (roomId: number) => new Chat(roomId)
+export const newChat = (roomId: number): IChat => new Chat(roomId)
 

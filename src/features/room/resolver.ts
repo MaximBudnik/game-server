@@ -34,7 +34,12 @@ const resolvers: IResolvers = {
             return Room.room
         },
         createRoom: (parent, {room}: { room: RoomInput }, context, info): RoomType => {
-            const res = RoomList.addRoom({...room, id: RoomList.generateValidRoomId(), players: []})
+            const res = RoomList.addRoom({
+                ...room,
+                id: RoomList.generateValidRoomId(),
+                players: [],
+                gameStatus: "lobby"
+            })
             return res
         },
         deleteRoom: (parent, {room}: { room: RoomType }, context, info): RoomType => {

@@ -4,7 +4,17 @@ import {TypeDefRegistry} from "../base/registry";
 const typeDef = gql`
 
     enum characterEnum {
+        girl
+        boy
         redKnight
+        orangeKnight
+        blueDragon
+        greenDragon
+    }
+
+    type PlayerEntity {
+        id: Int!
+        position: Position
     }
 
     extend type Player {
@@ -18,9 +28,9 @@ const typeDef = gql`
     #    extend type Query {
     #    }
 
-    #    extend type Mutation {
-    #        
-    #    }
+    extend type Mutation {
+        movePlayer(direction:MoveDirectionInput,playerId:Int!,roomId:Int!): Game
+    }
 
     #    extend type Subscription {
     #        

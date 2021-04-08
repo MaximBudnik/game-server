@@ -1,20 +1,13 @@
-export type CharacterType = 'redKnight'
+import {PlayerType} from "./PlayerTypes";
+import {gameStatusType} from "./GameTypes";
 
-
-export type PlayerType = {
-    id: number
-    name: string
-    character: CharacterType
-}
 
 export type RoomType = {
     id: number
     name: string
     players: Array<PlayerType>
+    gameStatus: gameStatusType
 }
-
-
-/*  Frontend only   */
 
 export type RoomFormType = {
     name: string
