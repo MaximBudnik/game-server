@@ -1,5 +1,12 @@
 import {GameEntity, IGameEntity, moveMixin} from "../../entity";
-import {movePayload, playerActionType, PlayerEntityType, position} from "../../../../types";
+import {
+    AnimationDirectionType,
+    AnimationType,
+    movePayload,
+    playerActionType,
+    PlayerEntityType,
+    position
+} from "../../../../types";
 
 
 export interface IPlayer extends IGameEntity {
@@ -17,6 +24,10 @@ class PlayerEntity extends moveMixin(GameEntity) implements IPlayer {
     private readonly _playerId: number
     private readonly _actionQueue: Array<playerActionType> = []
 
+    private _animation: AnimationType = "idle"
+    private _animationDirection: AnimationDirectionType = "right"
+    private _animationResetCount = 0
+
     constructor({id, position}: PlayerEntityConstructorParams) {
         super({position});
         this._playerId = id
@@ -32,7 +43,20 @@ class PlayerEntity extends moveMixin(GameEntity) implements IPlayer {
             switch (action.type) {
                 case "move":
                     action = action as playerActionType<movePayload>
+                    this._animation = "walking"
+
+                    if (action.payload.x !== 0) {
+                        this._animationDirection = action.payload.x > 0 ? "right" : "left"
+                    }
+
                     this.move({...action.payload})
+                    break;
+            }
+        } else {
+            if (this._animation !== "idle") this._animationResetCount++
+            if (this._animationResetCount === 25) {
+                this._animation = "idle"
+                this._animationResetCount = 0
             }
         }
     }
@@ -48,7 +72,9 @@ class PlayerEntity extends moveMixin(GameEntity) implements IPlayer {
     getEntityData = (): PlayerEntityType => {
         return {
             id: this.playerId,
-            position: this.position
+            position: this.position,
+            animation: this._animation,
+            animationDirection: this._animationDirection
         }
     }
 }

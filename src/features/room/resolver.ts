@@ -29,7 +29,8 @@ const resolvers: IResolvers = {
             const Room: IRoom = RoomList.getRoom(roomId)
             Room.deletePlayer(playerId)
             if (Room.room.players.length === 0) {
-                RoomList.deleteRoom(Room.room)
+                //Disabled for dev
+                // RoomList.deleteRoom(Room.room)
             }
             return Room.room
         },

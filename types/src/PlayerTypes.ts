@@ -14,6 +14,8 @@ export type PlayerEntityType = {
         y: number
     },
     id: number
+    animation: AnimationType
+    animationDirection: AnimationDirectionType
 }
 
 export type playerActionType<payload = any> = {
@@ -23,3 +25,5 @@ export type playerActionType<payload = any> = {
 
 export type movePayload = moveDirectionType
 
+export type AnimationType = 'idle' | 'walking' | 'attacked'
+export type AnimationDirectionType = 'left' | 'right'

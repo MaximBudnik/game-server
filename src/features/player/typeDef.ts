@@ -12,9 +12,22 @@ const typeDef = gql`
         greenDragon
     }
 
+    enum animationEnum {
+        idle
+        walking
+        attacked
+    }
+
+    enum animationDirectionEnum {
+        left
+        right
+    }
+
     type PlayerEntity {
         id: Int!
         position: Position
+        animation: animationEnum
+        animationDirection: animationDirectionEnum
     }
 
     extend type Player {
